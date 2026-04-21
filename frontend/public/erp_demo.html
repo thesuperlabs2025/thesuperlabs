@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garments ERP - Product Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0a1a;color:#fff;overflow:hidden;width:1280px;height:720px}
+.scene{position:absolute;inset:0;opacity:0;transform:scale(0.96);transition:opacity 0.6s ease,transform 0.6s ease;display:flex;flex-direction:column}
+.scene.active{opacity:1;transform:scale(1)}
+.scene.exit{opacity:0;transform:scale(1.04)}
+#intro{background:linear-gradient(135deg,#0a0a1a 0%,#1a0a2e 50%,#0a1a2e 100%);align-items:center;justify-content:center;text-align:center}
+#intro .logo{font-size:64px;font-weight:900;background:linear-gradient(135deg,#6c63ff,#00d4ff,#ff6b9d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulse 2s infinite}
+#intro .sub{font-size:22px;color:#aaa;margin-top:12px;letter-spacing:3px;text-transform:uppercase}
+#intro .tagline{font-size:16px;color:#6c63ff;margin-top:20px;opacity:0.8}
+@keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}
+.sidebar{width:220px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border-right:1px solid rgba(255,255,255,0.1);padding:20px 0;flex-shrink:0}
+.sidebar .brand{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,0.1);font-size:18px;font-weight:700;color:#fff}
+.sidebar .brand span{color:#6c63ff}
+.nav-item{padding:12px 20px;display:flex;align-items:center;gap:12px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;border-left:3px solid transparent}
+.nav-item.active{color:#fff;background:rgba(108,99,255,0.2);border-left-color:#6c63ff}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.topbar{height:60px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 24px;gap:16px}
+.topbar h1{font-size:20px;font-weight:600;flex:1}
+.topbar .badge{padding:4px 12px;background:rgba(108,99,255,0.3);border:1px solid #6c63ff;border-radius:20px;font-size:12px;color:#6c63ff}
+.main{flex:1;padding:20px;overflow:hidden;background:rgba(0,0,0,0.2)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.stat-card{background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
+.stat-card .label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px}
+.stat-card .value{font-size:28px;font-weight:700;margin:8px 0;color:#fff}
+.stat-card .change{font-size:12px;color:#00e884}
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.chart-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
+.chart-box h3{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:16px}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:120px}
+.bar{flex:1;border-radius:6px 6px 0 0}
+.pie-placeholder{width:120px;height:120px;border-radius:50%;background:conic-gradient(#6c63ff 0% 35%,#00d4ff 35% 55%,#ff6b9d 55% 75%,#00e884 75% 100%);margin:0 auto}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{padding:10px 14px;text-align:left;color:rgba(255,255,255,0.5);font-weight:500;border-bottom:1px solid rgba(255,255,255,0.1)}
+.data-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.85)}
+.status-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.status-active{background:rgba(0,232,132,0.2);color:#00e884}
+.status-pending{background:rgba(255,165,0,0.2);color:#ffa500}
+.status-done{background:rgba(0,212,255,0.2);color:#00d4ff}
+.btn-primary{padding:6px 14px;background:#6c63ff;border:none;border-radius:8px;color:#fff;font-size:12px;cursor:pointer}
+.table-wrap{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden}
+.tna-grid{display:grid;gap:12px}
+.tna-item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px}
+.tna-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.tna-progress{flex:1;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+.tna-bar{height:100%;border-radius:3px}
+.reports-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.report-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;cursor:pointer}
+.report-card .icon{font-size:28px;margin-bottom:10px}
+.report-card h4{font-size:13px;font-weight:600;margin-bottom:6px}
+.report-card p{font-size:11px;color:rgba(255,255,255,0.5)}
+.masters-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.master-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center;cursor:pointer}
+.master-card .icon{font-size:24px;margin-bottom:8px}
+.master-card span{font-size:12px;color:rgba(255,255,255,0.7)}
+.print-doc{background:#fff;border-radius:8px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.print-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #6c63ff;padding-bottom:16px;margin-bottom:16px}
+.print-company{font-size:20px;font-weight:700;color:#6c63ff}
+.print-doc-type{font-size:14px;font-weight:600;color:#333}
+.print-table{width:100%;border-collapse:collapse;margin-top:12px}
+.print-table th{background:#f0f0ff;padding:8px;text-align:left;font-size:11px;color:#555;border:1px solid #ddd}
+.print-table td{padding:8px;font-size:11px;border:1px solid #eee}
+.print-total{display:flex;justify-content:flex-end;margin-top:16px}
+.print-total-box{background:#f8f8ff;border:1px solid #6c63ff;border-radius:8px;padding:12px;min-width:200px}
+.priv-grid{display:grid;gap:10px}
+.priv-row{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;display:flex;align-items:center;gap:16px}
+.priv-module{font-size:13px;font-weight:500;flex:1}
+.priv-checks{display:flex;gap:12px}
+.priv-check{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.6)}
+.priv-check input{accent-color:#6c63ff}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ledger-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px}
+.ledger-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12px}
+.ledger-row.credit{color:#00e884}
+.ledger-row.debit{color:#ff6b9d}
+.device{border-radius:20px;overflow:hidden;border:3px solid rgba(255,255,255,0.15);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.device-screen{width:100%;height:100%;background:#1a1a2e;overflow:hidden}
+#outro{background:linear-gradient(135deg,#0a0a1a 0%,#1a0a2e 50%,#0a1a2e 100%);align-items:center;justify-content:center;text-align:center}
+#outro h1{font-size:48px;font-weight:900;background:linear-gradient(135deg,#6c63ff,#00d4ff,#ff6b9d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#outro p{font-size:18px;color:#aaa;margin-top:16px}
+#outro .features{display:flex;gap:32px;margin-top:32px;justify-content:center}
+#outro .feat{text-align:center;color:rgba(255,255,255,0.7)}
+#outro .feat .icon{font-size:32px;margin-bottom:8px}
+#outro .feat span{font-size:13px}
+#progress{position:fixed;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.1);z-index:9999}
+#progress-bar{height:100%;background:linear-gradient(90deg,#6c63ff,#00d4ff);width:0%;transition:width 0.1s}
+#scene-label{position:fixed;top:20px;right:20px;padding:8px 16px;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);border-radius:20px;font-size:12px;color:rgba(255,255,255,0.8);z-index:9999}
+</style>
+</head>
+<body>
+<div id="progress"><div id="progress-bar"></div></div>
+<div id="scene-label">Garments ERP</div>
+
+<!-- INTRO -->
+<div class="scene active" id="intro">
+  <div class="logo">⚡ GarmentsERP</div>
+  <div class="sub">Complete Business Management System</div>
+  <div class="tagline">Dashboard · Garments · TNA · Reports · Masters · Accounts</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="scene" id="s-dashboard" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item active"><span>📊</span> Dashboard</div><div class="nav-item"><span>👗</span> Garments</div><div class="nav-item"><span>📅</span> TNA</div><div class="nav-item"><span>📈</span> Reports</div><div class="nav-item"><span>⚙️</span> Masters</div><div class="nav-item"><span>💰</span> Accounts</div><div class="nav-item"><span>🔐</span> Privilege</div></div>
+  <div class="content"><div class="topbar"><h1>Dashboard</h1><div class="badge">FY 2024–25</div></div>
+  <div class="main"><div class="stats-grid"><div class="stat-card"><div class="label">Total Orders</div><div class="value">1,248</div><div class="change">↑ 12.4%</div></div><div class="stat-card"><div class="label">Revenue</div><div class="value">₹48.2L</div><div class="change">↑ 8.7%</div></div><div class="stat-card"><div class="label">Pending TNA</div><div class="value">34</div><div class="change" style="color:#ffa500">⚠ 5 overdue</div></div><div class="stat-card"><div class="label">Stock Value</div><div class="value">₹12.6L</div><div class="change">↑ 3.2%</div></div></div>
+  <div class="chart-row"><div class="chart-box"><h3>Monthly Revenue</h3><div class="bar-chart"><div class="bar" style="height:60%;background:linear-gradient(#6c63ff,#4a42dd)"></div><div class="bar" style="height:75%;background:linear-gradient(#6c63ff,#4a42dd)"></div><div class="bar" style="height:50%;background:linear-gradient(#6c63ff,#4a42dd)"></div><div class="bar" style="height:90%;background:linear-gradient(#00d4ff,#0099bb)"></div><div class="bar" style="height:70%;background:linear-gradient(#6c63ff,#4a42dd)"></div><div class="bar" style="height:85%;background:linear-gradient(#ff6b9d,#cc4477)"></div><div class="bar" style="height:95%;background:linear-gradient(#00e884,#00aa55)"></div><div class="bar" style="height:80%;background:linear-gradient(#6c63ff,#4a42dd)"></div></div></div><div class="chart-box"><h3>Category Mix</h3><div class="pie-placeholder"></div></div></div></div></div>
+</div>
+
+<!-- GARMENTS -->
+<div class="scene" id="s-garments" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item"><span>📊</span> Dashboard</div><div class="nav-item active"><span>👗</span> Garments</div><div class="nav-item"><span>📅</span> TNA</div><div class="nav-item"><span>📈</span> Reports</div><div class="nav-item"><span>⚙️</span> Masters</div><div class="nav-item"><span>💰</span> Accounts</div></div>
+  <div class="content"><div class="topbar"><h1>Garments Orders</h1><button class="btn-primary">+ New Order</button></div>
+  <div class="main"><div class="table-wrap"><table class="data-table"><thead><tr><th>Order No</th><th>Style</th><th>Buyer</th><th>Qty</th><th>Delivery</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>ORD-0045</td><td>Ladies Kurti XL</td><td>Fashion Hub</td><td>2,400</td><td>25 Mar 2025</td><td><span class="status-badge status-active">In Progress</span></td><td><button class="btn-primary">View</button></td></tr><tr><td>ORD-0044</td><td>Men's Shirt Formal</td><td>RetailMart</td><td>1,800</td><td>20 Mar 2025</td><td><span class="status-badge status-done">Dispatched</span></td><td><button class="btn-primary">View</button></td></tr><tr><td>ORD-0043</td><td>Kids Frock</td><td>KidZone</td><td>3,200</td><td>18 Mar 2025</td><td><span class="status-badge status-pending">Cutting</span></td><td><button class="btn-primary">View</button></td></tr><tr><td>ORD-0042</td><td>Denim Jeans</td><td>BlueStar</td><td>900</td><td>15 Mar 2025</td><td><span class="status-badge status-done">Completed</span></td><td><button class="btn-primary">View</button></td></tr><tr><td>ORD-0041</td><td>Saree Blouse</td><td>Silk Palace</td><td>600</td><td>12 Mar 2025</td><td><span class="status-badge status-pending">Stitching</span></td><td><button class="btn-primary">View</button></td></tr></tbody></table></div></div></div>
+</div>
+
+<!-- TNA -->
+<div class="scene" id="s-tna" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item"><span>📊</span> Dashboard</div><div class="nav-item"><span>👗</span> Garments</div><div class="nav-item active"><span>📅</span> TNA</div><div class="nav-item"><span>📈</span> Reports</div><div class="nav-item"><span>⚙️</span> Masters</div></div>
+  <div class="content"><div class="topbar"><h1>TNA Tracking</h1><div class="badge">5 Alerts</div></div>
+  <div class="main"><div class="tna-grid"><div class="tna-item"><div class="tna-dot" style="background:#00e884"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">Fabric Booking</div><div style="font-size:11px;color:#aaa">ORD-0045 · Due: 10 Mar</div></div><div class="tna-progress"><div class="tna-bar" style="width:90%;background:#00e884"></div></div><span style="font-size:12px;color:#00e884">90%</span></div><div class="tna-item"><div class="tna-dot" style="background:#6c63ff"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">Cutting</div><div style="font-size:11px;color:#aaa">ORD-0045 · Due: 15 Mar</div></div><div class="tna-progress"><div class="tna-bar" style="width:65%;background:#6c63ff"></div></div><span style="font-size:12px;color:#6c63ff">65%</span></div><div class="tna-item"><div class="tna-dot" style="background:#ffa500"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">Stitching</div><div style="font-size:11px;color:#aaa">ORD-0045 · Due: 20 Mar</div></div><div class="tna-progress"><div class="tna-bar" style="width:40%;background:#ffa500"></div></div><span style="font-size:12px;color:#ffa500">40%</span></div><div class="tna-item"><div class="tna-dot" style="background:#ff6b9d"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">Finishing &amp; QC</div><div style="font-size:11px;color:#aaa">ORD-0045 · Due: 23 Mar</div></div><div class="tna-progress"><div class="tna-bar" style="width:15%;background:#ff6b9d"></div></div><span style="font-size:12px;color:#ff6b9d">15%</span></div><div class="tna-item"><div class="tna-dot" style="background:#00d4ff"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">Dispatch</div><div style="font-size:11px;color:#aaa">ORD-0045 · Due: 25 Mar</div></div><div class="tna-progress"><div class="tna-bar" style="width:5%;background:#00d4ff"></div></div><span style="font-size:12px;color:#00d4ff">5%</span></div></div></div></div>
+</div>
+
+<!-- REPORTS -->
+<div class="scene" id="s-reports" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item"><span>📊</span> Dashboard</div><div class="nav-item"><span>👗</span> Garments</div><div class="nav-item"><span>📅</span> TNA</div><div class="nav-item active"><span>📈</span> Reports</div><div class="nav-item"><span>⚙️</span> Masters</div></div>
+  <div class="content"><div class="topbar"><h1>Reports</h1></div>
+  <div class="main"><div class="reports-grid"><div class="report-card"><div class="icon">📦</div><h4>Stock Report</h4><p>Yarn, Fabric, Trims &amp; PCS</p></div><div class="report-card"><div class="icon">📊</div><h4>Order Status</h4><p>Track every order lifecycle</p></div><div class="report-card"><div class="icon">💹</div><h4>Profit &amp; Loss</h4><p>Financial performance analysis</p></div><div class="report-card"><div class="icon">🧾</div><h4>GST Reports</h4><p>GSTR-1, GSTR-2, HSN Summary</p></div><div class="report-card"><div class="icon">💼</div><h4>Outstanding</h4><p>Pending receivables &amp; payables</p></div><div class="report-card"><div class="icon">📋</div><h4>Order Sheet</h4><p>Detailed order breakdown</p></div></div></div></div>
+</div>
+
+<!-- MASTERS -->
+<div class="scene" id="s-masters" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item"><span>📊</span> Dashboard</div><div class="nav-item"><span>👗</span> Garments</div><div class="nav-item"><span>📅</span> TNA</div><div class="nav-item"><span>📈</span> Reports</div><div class="nav-item active"><span>⚙️</span> Masters</div></div>
+  <div class="content"><div class="topbar"><h1>Masters</h1></div>
+  <div class="main"><div class="masters-grid"><div class="master-card"><div class="icon">🎨</div><span>Colors</span></div><div class="master-card"><div class="icon">📏</div><span>Sizes</span></div><div class="master-card"><div class="icon">🏭</div><span>Suppliers</span></div><div class="master-card"><div class="icon">👥</div><span>Customers</span></div><div class="master-card"><div class="icon">🧵</div><span>Yarn Types</span></div><div class="master-card"><div class="icon">🌿</div><span>Fabrics</span></div><div class="master-card"><div class="icon">🏷️</div><span>Brands</span></div><div class="master-card"><div class="icon">📂</div><span>Categories</span></div><div class="master-card"><div class="icon">📐</div><span>UOM</span></div><div class="master-card"><div class="icon">🏙️</div><span>Cities</span></div><div class="master-card"><div class="icon">💳</div><span>Payment Modes</span></div><div class="master-card"><div class="icon">🏦</div><span>Bank Accounts</span></div></div></div></div>
+</div>
+
+<!-- DYEING OUTWARD PRINT -->
+<div class="scene" id="s-dyeing" style="flex-direction:row;background:#e8e8f0">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item active"><span>🖨️</span> Dyeing Outward</div></div>
+  <div style="flex:1;padding:20px;overflow:hidden">
+    <div class="print-doc"><div class="print-header"><div><div class="print-company">⚡ GarmentsERP Co.</div><div style="font-size:11px;color:#666">123 Industrial Area, Coimbatore · GST: 33XXXXX1234Z1Z5</div></div><div style="text-align:right"><div class="print-doc-type">DYEING OUTWARD</div><div style="font-size:11px;color:#666">No: DYE-OUT-0023 · Date: 16 Mar 2025</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px;font-size:12px"><div><b>To:</b> Rainbow Dyeing Works<br><span style="color:#666">45 Color Street, Tiruppur</span></div><div><b>Order Ref:</b> ORD-0045<br><b>Fabric Type:</b> Cotton Shirting</div></div><table class="print-table"><thead><tr><th>#</th><th>Fabric Description</th><th>Color</th><th>Rolls</th><th>Weight (Kg)</th><th>Challan No</th></tr></thead><tbody><tr><td>1</td><td>Cotton Shirting 60s</td><td>Royal Blue</td><td>12</td><td>240.50</td><td>CH-001</td></tr><tr><td>2</td><td>Cotton Shirting 60s</td><td>Maroon</td><td>8</td><td>160.00</td><td>CH-002</td></tr><tr><td>3</td><td>Polyester Blend</td><td>Black</td><td>5</td><td>100.75</td><td>CH-003</td></tr></tbody></table><div class="print-total"><div class="print-total-box"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span>Total Rolls:</span><b>25</b></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Total Weight:</span><b>501.25 Kg</b></div></div></div></div>
+  </div>
+</div>
+
+<!-- YARN PO PRINT -->
+<div class="scene" id="s-yarnpo" style="flex-direction:row;background:#e8e8f0">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item active" style="border-left-color:#00d4ff"><span>🖨️</span> Yarn PO Print</div></div>
+  <div style="flex:1;padding:20px;overflow:hidden">
+    <div class="print-doc"><div class="print-header" style="border-bottom-color:#00a0bb"><div><div class="print-company" style="color:#00a0bb">⚡ GarmentsERP Co.</div><div style="font-size:11px;color:#666">123 Industrial Area, Coimbatore</div></div><div style="text-align:right"><div class="print-doc-type">YARN PURCHASE ORDER</div><div style="font-size:11px;color:#666">PO No: YPO-0087 · Date: 16 Mar 2025</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px;font-size:12px"><div><b>Supplier:</b> Premium Yarn Mills<br><span style="color:#666">78 Yarn Market, Ludhiana</span></div><div><b>Payment Terms:</b> 30 Days<br><b>Delivery By:</b> 22 Mar 2025</div></div><table class="print-table"><thead><tr><th>#</th><th>Yarn Description</th><th>Count</th><th>Qty (Kg)</th><th>Rate/Kg</th><th>Amount</th></tr></thead><tbody><tr><td>1</td><td>Cotton Carded Yarn</td><td>30s</td><td>500</td><td>&#8377;280.00</td><td>&#8377;1,40,000</td></tr><tr><td>2</td><td>Cotton Combed Yarn</td><td>40s</td><td>300</td><td>&#8377;320.00</td><td>&#8377;96,000</td></tr><tr><td>3</td><td>Polyester Yarn</td><td>150D</td><td>200</td><td>&#8377;180.00</td><td>&#8377;36,000</td></tr></tbody></table><div class="print-total"><div class="print-total-box"><div style="font-size:12px;margin-bottom:6px;display:flex;justify-content:space-between"><span>Sub Total:</span><b>&#8377;2,72,000</b></div><div style="font-size:12px;margin-bottom:6px;display:flex;justify-content:space-between"><span>GST (18%):</span><b>&#8377;48,960</b></div><div style="font-size:14px;display:flex;justify-content:space-between;color:#6c63ff"><span>Grand Total:</span><b>&#8377;3,20,960</b></div></div></div></div>
+  </div>
+</div>
+
+<!-- STITCHING OUTWARD PRINT -->
+<div class="scene" id="s-stitch" style="flex-direction:row;background:#e8e8f0">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item active" style="border-left-color:#ff6b9d"><span>🖨️</span> Stitching Outward</div></div>
+  <div style="flex:1;padding:20px;overflow:hidden">
+    <div class="print-doc"><div class="print-header" style="border-bottom-color:#cc4477"><div><div class="print-company" style="color:#cc4477">⚡ GarmentsERP Co.</div><div style="font-size:11px;color:#666">123 Industrial Area, Coimbatore</div></div><div style="text-align:right"><div class="print-doc-type">STITCHING OUTWARD</div><div style="font-size:11px;color:#666">No: STI-OUT-0056 · Date: 16 Mar 2025</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px;font-size:12px"><div><b>To:</b> Star Stitching Unit<br><span style="color:#666">22 Tailor Lane, Tiruppur</span></div><div><b>Order:</b> ORD-0045 · <b>Style:</b> Ladies Kurti XL</div></div><table class="print-table"><thead><tr><th>#</th><th>Description</th><th>Color</th><th>Size</th><th>Qty (Pcs)</th><th>Rate</th><th>Amount</th></tr></thead><tbody><tr><td>1</td><td>Ladies Kurti</td><td>Royal Blue</td><td>XL</td><td>400</td><td>&#8377;45</td><td>&#8377;18,000</td></tr><tr><td>2</td><td>Ladies Kurti</td><td>Maroon</td><td>XL</td><td>350</td><td>&#8377;45</td><td>&#8377;15,750</td></tr><tr><td>3</td><td>Ladies Kurti</td><td>Black</td><td>XXL</td><td>250</td><td>&#8377;48</td><td>&#8377;12,000</td></tr></tbody></table><div class="print-total"><div class="print-total-box"><div style="font-size:12px;margin-bottom:6px;display:flex;justify-content:space-between"><span>Total Pcs:</span><b>1,000</b></div><div style="font-size:14px;display:flex;justify-content:space-between;color:#cc4477"><span>Total Amount:</span><b>&#8377;45,750</b></div></div></div></div>
+  </div>
+</div>
+
+<!-- USER PRIVILEGE -->
+<div class="scene" id="s-priv" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item"><span>📊</span> Dashboard</div><div class="nav-item"><span>👗</span> Garments</div><div class="nav-item active"><span>🔐</span> Privilege</div></div>
+  <div class="content"><div class="topbar"><h1>User Privileges</h1><div class="badge">Admin Panel</div></div>
+  <div class="main"><div style="margin-bottom:14px;font-size:13px;color:rgba(255,255,255,0.6)">User: <b style="color:#fff">rajan@company.com</b> · Role: Manager</div><div class="priv-grid"><div class="priv-row"><div class="priv-module">📊 Dashboard</div><div class="priv-checks"><label class="priv-check"><input type="checkbox" checked> View</label><label class="priv-check"><input type="checkbox" checked> Edit</label><label class="priv-check"><input type="checkbox"> Delete</label><label class="priv-check"><input type="checkbox" checked> Export</label></div></div><div class="priv-row"><div class="priv-module">👗 Garments Orders</div><div class="priv-checks"><label class="priv-check"><input type="checkbox" checked> View</label><label class="priv-check"><input type="checkbox" checked> Edit</label><label class="priv-check"><input type="checkbox"> Delete</label><label class="priv-check"><input type="checkbox" checked> Export</label></div></div><div class="priv-row"><div class="priv-module">📅 TNA Management</div><div class="priv-checks"><label class="priv-check"><input type="checkbox" checked> View</label><label class="priv-check"><input type="checkbox" checked> Edit</label><label class="priv-check"><input type="checkbox"> Delete</label><label class="priv-check"><input type="checkbox"> Export</label></div></div><div class="priv-row"><div class="priv-module">📈 Reports</div><div class="priv-checks"><label class="priv-check"><input type="checkbox" checked> View</label><label class="priv-check"><input type="checkbox"> Edit</label><label class="priv-check"><input type="checkbox"> Delete</label><label class="priv-check"><input type="checkbox" checked> Export</label></div></div><div class="priv-row"><div class="priv-module">💰 Accounts</div><div class="priv-checks"><label class="priv-check"><input type="checkbox" checked> View</label><label class="priv-check"><input type="checkbox"> Edit</label><label class="priv-check"><input type="checkbox"> Delete</label><label class="priv-check"><input type="checkbox"> Export</label></div></div></div></div></div>
+</div>
+
+<!-- ACCOUNTS -->
+<div class="scene" id="s-accounts" style="flex-direction:row">
+  <div class="sidebar"><div class="brand">⚡ <span>Garments</span>ERP</div><div class="nav-item"><span>📊</span> Dashboard</div><div class="nav-item active"><span>💰</span> Accounts</div><div class="nav-item"><span>📈</span> Reports</div></div>
+  <div class="content"><div class="topbar"><h1>Accounts</h1><div class="badge">FY 2024–25</div></div>
+  <div class="main"><div class="acc-grid"><div class="ledger-box"><h3 style="font-size:14px;margin-bottom:14px;color:rgba(255,255,255,0.8)">Cash Book</h3><div class="ledger-row"><span>Opening Balance</span><span style="color:#fff">&#8377;2,40,000</span></div><div class="ledger-row credit"><span>Sales Receipt</span><span>+&#8377;85,000</span></div><div class="ledger-row debit"><span>Yarn Purchase</span><span>-&#8377;42,000</span></div><div class="ledger-row credit"><span>Jobwork Receipt</span><span>+&#8377;28,000</span></div><div class="ledger-row debit"><span>Wages Payment</span><span>-&#8377;36,500</span></div><div class="ledger-row" style="font-weight:700;color:#fff"><span>Closing Balance</span><span>&#8377;2,74,500</span></div></div><div class="ledger-box"><h3 style="font-size:14px;margin-bottom:14px;color:rgba(255,255,255,0.8)">Bank Summary</h3><div class="ledger-row"><span>HDFC Bank</span><span style="color:#00e884">&#8377;4,85,200</span></div><div class="ledger-row"><span>SBI Current</span><span style="color:#00e884">&#8377;1,23,800</span></div><div class="ledger-row"><span>ICICI Savings</span><span style="color:#00e884">&#8377;67,500</span></div><div class="ledger-row" style="border-top:1px solid rgba(255,255,255,0.2);margin-top:8px;font-weight:700;color:#fff"><span>Total Balance</span><span>&#8377;6,76,500</span></div><div style="margin-top:16px"><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px">Outstanding Receivables</div><div style="font-size:22px;font-weight:700;color:#00d4ff">&#8377;12,45,000</div></div></div></div></div></div>
+</div>
+
+<!-- DEVICES: ALL SCREEN SIZES -->
+<div class="scene" id="s-devices" style="align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0a1a,#1a0a2e)">
+  <div style="text-align:center;margin-bottom:20px"><div style="font-size:24px;font-weight:700;color:#fff">Works on Every Device</div><div style="font-size:14px;color:rgba(255,255,255,0.5);margin-top:6px">Fully Responsive · Mac &amp; Windows · Mobile to Desktop</div></div>
+  <div style="display:flex;align-items:flex-end;justify-content:center;gap:30px">
+    <div style="text-align:center"><div style="width:560px;height:320px;border-radius:12px;border:3px solid rgba(255,255,255,0.2);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6);display:flex;flex-direction:row"><div style="width:80px;background:#12122a;padding:10px 0"><div style="font-size:8px;font-weight:700;color:#6c63ff;padding:6px 8px;margin-bottom:4px">⚡ ERP</div><div style="font-size:8px;color:#fff;padding:6px 8px;background:rgba(108,99,255,0.2);border-left:2px solid #6c63ff">📊 Dashboard</div><div style="font-size:8px;color:rgba(255,255,255,0.5);padding:6px 8px">👗 Garments</div><div style="font-size:8px;color:rgba(255,255,255,0.5);padding:6px 8px">📅 TNA</div><div style="font-size:8px;color:rgba(255,255,255,0.5);padding:6px 8px">📈 Reports</div><div style="font-size:8px;color:rgba(255,255,255,0.5);padding:6px 8px">⚙️ Masters</div><div style="font-size:8px;color:rgba(255,255,255,0.5);padding:6px 8px">💰 Accounts</div></div><div style="flex:1;padding:12px;background:#0d0d1f"><div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:10px">Dashboard — FY 2024-25</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px"><div style="background:rgba(108,99,255,0.2);border-radius:6px;padding:6px"><div style="font-size:7px;color:#aaa">Orders</div><div style="font-size:12px;font-weight:700;color:#fff">1,248</div></div><div style="background:rgba(0,212,255,0.2);border-radius:6px;padding:6px"><div style="font-size:7px;color:#aaa">Revenue</div><div style="font-size:12px;font-weight:700;color:#fff">&#8377;48L</div></div><div style="background:rgba(255,107,157,0.2);border-radius:6px;padding:6px"><div style="font-size:7px;color:#aaa">TNA</div><div style="font-size:12px;font-weight:700;color:#fff">34</div></div><div style="background:rgba(0,232,132,0.2);border-radius:6px;padding:6px"><div style="font-size:7px;color:#aaa">Stock</div><div style="font-size:12px;font-weight:700;color:#fff">&#8377;12L</div></div></div><div style="background:rgba(255,255,255,0.05);border-radius:6px;padding:8px;height:80px;display:flex;align-items:flex-end;gap:4px"><div style="flex:1;height:60%;background:#6c63ff;border-radius:2px 2px 0 0"></div><div style="flex:1;height:75%;background:#6c63ff;border-radius:2px 2px 0 0"></div><div style="flex:1;height:50%;background:#6c63ff;border-radius:2px 2px 0 0"></div><div style="flex:1;height:90%;background:#00d4ff;border-radius:2px 2px 0 0"></div><div style="flex:1;height:70%;background:#6c63ff;border-radius:2px 2px 0 0"></div><div style="flex:1;height:100%;background:#00e884;border-radius:2px 2px 0 0"></div><div style="flex:1;height:85%;background:#ff6b9d;border-radius:2px 2px 0 0"></div><div style="flex:1;height:80%;background:#6c63ff;border-radius:2px 2px 0 0"></div></div></div></div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px">🖥 Desktop / Laptop</div></div>
+    <div style="text-align:center"><div style="width:180px;height:260px;border-radius:14px;border:3px solid rgba(255,255,255,0.2);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6);display:flex;flex-direction:column"><div style="background:#12122a;padding:8px;font-size:8px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center"><span>⚡ ERP</span><span style="color:#6c63ff">☰</span></div><div style="flex:1;padding:8px;background:#0d0d1f"><div style="font-size:9px;font-weight:700;color:#fff;margin-bottom:8px">Garments Orders</div><div style="background:rgba(255,255,255,0.05);border-radius:6px;padding:8px;margin-bottom:6px"><div style="font-size:8px;font-weight:600">ORD-0045</div><div style="font-size:7px;color:#aaa">Ladies Kurti · 2400 pcs</div><span style="font-size:7px;padding:2px 6px;background:rgba(0,232,132,0.2);color:#00e884;border-radius:10px;display:inline-block;margin-top:4px">In Progress</span></div><div style="background:rgba(255,255,255,0.05);border-radius:6px;padding:8px;margin-bottom:6px"><div style="font-size:8px;font-weight:600">ORD-0044</div><div style="font-size:7px;color:#aaa">Men Shirt · 1800 pcs</div><span style="font-size:7px;padding:2px 6px;background:rgba(0,212,255,0.2);color:#00d4ff;border-radius:10px;display:inline-block;margin-top:4px">Dispatched</span></div><div style="background:rgba(255,255,255,0.05);border-radius:6px;padding:8px"><div style="font-size:8px;font-weight:600">ORD-0043</div><div style="font-size:7px;color:#aaa">Kids Frock · 3200 pcs</div><span style="font-size:7px;padding:2px 6px;background:rgba(255,165,0,0.2);color:#ffa500;border-radius:10px;display:inline-block;margin-top:4px">Cutting</span></div></div></div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px">📱 Tablet</div></div>
+    <div style="text-align:center"><div style="width:100px;height:200px;border-radius:20px;border:4px solid rgba(255,255,255,0.2);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6);display:flex;flex-direction:column"><div style="background:#12122a;padding:5px;font-size:7px;font-weight:700;color:#fff;display:flex;justify-content:space-between"><span>⚡</span><span>☰</span></div><div style="flex:1;padding:6px;background:#0d0d1f"><div style="font-size:7px;font-weight:700;color:#fff;margin-bottom:6px">TNA Status</div><div style="margin-bottom:4px"><div style="font-size:6px;color:#aaa;margin-bottom:2px">Fabric</div><div style="height:3px;background:rgba(255,255,255,0.1);border-radius:2px"><div style="width:90%;height:100%;background:#00e884;border-radius:2px"></div></div></div><div style="margin-bottom:4px"><div style="font-size:6px;color:#aaa;margin-bottom:2px">Cutting</div><div style="height:3px;background:rgba(255,255,255,0.1);border-radius:2px"><div style="width:65%;height:100%;background:#6c63ff;border-radius:2px"></div></div></div><div style="margin-bottom:4px"><div style="font-size:6px;color:#aaa;margin-bottom:2px">Stitching</div><div style="height:3px;background:rgba(255,255,255,0.1);border-radius:2px"><div style="width:40%;height:100%;background:#ffa500;border-radius:2px"></div></div></div><div style="margin-bottom:4px"><div style="font-size:6px;color:#aaa;margin-bottom:2px">Finishing</div><div style="height:3px;background:rgba(255,255,255,0.1);border-radius:2px"><div style="width:15%;height:100%;background:#ff6b9d;border-radius:2px"></div></div></div><div style="margin-top:8px;background:rgba(108,99,255,0.2);border-radius:5px;padding:5px"><div style="font-size:6px;color:#aaa">Revenue</div><div style="font-size:12px;font-weight:700;color:#fff">&#8377;48L</div></div></div></div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px">📱 Mobile</div></div>
+  </div>
+</div>
+
+<!-- OUTRO -->
+<div class="scene" id="outro">
+  <h1>GarmentsERP</h1>
+  <p>Complete Garments Management — From Yarn to Dispatch</p>
+  <div class="features">
+    <div class="feat"><div class="icon">📱</div><span>Mobile Ready</span></div>
+    <div class="feat"><div class="icon">💻</div><span>Desktop &amp; Laptop</span></div>
+    <div class="feat"><div class="icon">📊</div><span>Real-time Reports</span></div>
+    <div class="feat"><div class="icon">🔐</div><span>Role-based Access</span></div>
+    <div class="feat"><div class="icon">🖨️</div><span>Print Previews</span></div>
+  </div>
+</div>
+
+<script>
+const scenes=[
+  {id:'intro',label:'Welcome',duration:3000},
+  {id:'s-dashboard',label:'📊 Dashboard',duration:5000},
+  {id:'s-garments',label:'👗 Garments',duration:4500},
+  {id:'s-tna',label:'📅 TNA Tracking',duration:4500},
+  {id:'s-reports',label:'📈 Reports',duration:4000},
+  {id:'s-masters',label:'⚙️ Masters',duration:3500},
+  {id:'s-dyeing',label:'🖨️ Dyeing Outward Print',duration:4000},
+  {id:'s-yarnpo',label:'🖨️ Yarn PO Print',duration:4000},
+  {id:'s-stitch',label:'🖨️ Stitching Outward Print',duration:4000},
+  {id:'s-priv',label:'🔐 User Privilege',duration:4000},
+  {id:'s-accounts',label:'💰 Accounts',duration:4000},
+  {id:'s-devices',label:'📱💻🖥 All Devices',duration:5000},
+  {id:'outro',label:'✨ GarmentsERP',duration:4000}
+];
+let cur=0;
+const total=scenes.reduce((a,s)=>a+s.duration,0);
+const pbar=document.getElementById('progress-bar');
+const lbl=document.getElementById('scene-label');
+const startTime=Date.now();
+function showScene(i){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(scenes[i].id);
+  if(el) el.classList.add('active');
+  lbl.textContent=scenes[i].label;
+}
+function nextScene(){
+  if(cur<scenes.length-1){cur++;showScene(cur);setTimeout(nextScene,scenes[cur].duration);}
+}
+showScene(0);
+setTimeout(nextScene,scenes[0].duration);
+(function tick(){
+  const pct=Math.min(100,((Date.now()-startTime)/total)*100);
+  pbar.style.width=pct+'%';
+  if(pct<100) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

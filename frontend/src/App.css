@@ -1,0 +1,435 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sidebar Layout Styles */
+:root {
+  --sidebar-width: 72px;
+  /* Standard Method Width */
+  --sidebar-expanded-width: 200px;
+  /* Width when someone wants to see full text */
+  --top-header-height: 56px;
+  --accent-color: #3b82f6;
+  --sidebar-bg: #111315;
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  --nav-hover: rgba(255, 255, 255, 0.04);
+  --nav-active-bg: rgba(59, 130, 246, 0.1);
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  height: 100dvh;
+  /* Strictly 100vh/100dvh */
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1060;
+  /* Higher z-index to stay above everything on mobile */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--sidebar-border);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sidebar.expanded {
+  width: var(--sidebar-expanded-width);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.sidebar-header {
+  padding: 1.5rem 1rem !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.text-gradient {
+  background: linear-gradient(45deg, #007bff, #00d2ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sidebar-nav .nav-link {
+  color: #94a3b8 !important;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0.25rem !important;
+  /* Extremely tight for laptops */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-nav .nav-link:hover {
+  background-color: var(--nav-hover);
+  color: #ffffff !important;
+}
+
+.sidebar-nav .nav-link.active {
+  background-color: var(--nav-active-bg);
+  color: var(--accent-color) !important;
+  border-left-color: var(--accent-color);
+}
+
+.sidebar-nav .nav-link i {
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+}
+
+.sidebar.expanded .nav-link {
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 0.75rem 1.25rem !important;
+  text-align: left;
+}
+
+.sidebar.expanded .nav-link i {
+  margin-bottom: 0;
+  margin-right: 12px;
+  font-size: 1.25rem;
+}
+
+.sidebar-nav .nav-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s;
+}
+
+.sidebar.expanded .nav-label {
+  font-size: 0.85rem;
+}
+
+/* Inventory Submenu Styles */
+.sidebar-nav .ps-4 .nav-link {
+  font-size: 0.9rem;
+  padding-left: 3rem !important;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-nav .ps-4 .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-left-color: rgba(13, 110, 253, 0.5);
+}
+
+.sidebar-nav .ps-4 .nav-link.active {
+  background-color: rgba(13, 110, 253, 0.15);
+  border-left-color: var(--active-color);
+}
+
+/* Tooltip for collapsed sidebar */
+.sidebar.collapsed .nav-link:hover .nav-tooltip {
+  opacity: 1;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-left: var(--sidebar-width);
+  min-width: 0;
+  max-width: 100vw;
+}
+
+.sidebar-open .main-content {
+  padding-left: var(--sidebar-expanded-width);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1rem 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sidebar-bg);
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.top-header {
+  height: var(--top-header-height);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.content-area {
+  flex: 1;
+}
+
+/* Mobile Responsiveness */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 991px) {
+  :root {
+    --sidebar-expanded-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+
+  .sidebar.expanded {
+    transform: translateX(0);
+    width: var(--sidebar-expanded-width);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  /* .sidebar.expanded .sidebar-nav overrides removed so internal scrolling works */
+
+  .main-content,
+  .sidebar-closed .main-content {
+    padding-left: 0;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .top-header {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-area {
+    padding: 1rem !important;
+  }
+
+  .top-header h5 {
+    font-size: 1.1rem;
+  }
+}
+
+.toggle-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.toggle-btn:active {
+  transform: scale(0.95);
+}
+
+/* Dashboard Premium UI Utilities */
+.bg-soft-primary {
+  background-color: rgba(79, 70, 229, 0.1) !important;
+  color: #4f46e5 !important;
+}
+
+.bg-soft-success {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  color: #10b981 !important;
+}
+
+.bg-soft-danger {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+}
+
+.bg-soft-warning {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  color: #f59e0b !important;
+}
+
+.stat-box {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-box::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.stat-box:hover::after {
+  opacity: 1;
+}
+
+.insight-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.shadow-sm-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+.pipeline-dot {
+  transition: transform 0.2s;
+}
+
+.pipeline-item:hover .pipeline-dot {
+  transform: scale(1.5);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+  display: block !important;
+  width: 4px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 10px;
+}
+
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) transparent;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+/* Dashboard old removals - keeping base if needed for other pages, but cleaning up specific ones */
+.dashboard-light {
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.card-soft {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+/* dashboard*/
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.table-black-header thead th {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.suggestion-active {
+  background-color: #e9ecef !important;
+}

@@ -1,0 +1,302 @@
+/* ================================
+   RESPONSIVE ENHANCEMENTS
+   For all frontend modules
+   ================================ */
+
+/* Base responsive adjustments */
+@media (max-width: 768px) {
+  /* Container spacing adjustments */
+  .container-fluid {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .container {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  /* Card adjustments */
+  .card {
+    margin-bottom: 15px;
+  }
+
+  .card-body {
+    padding: 15px !important;
+  }
+
+  /* Form adjustments */
+  .row.g-3 {
+    gap: 10px !important;
+  }
+
+  .col-md-3, .col-md-4, .col-md-6, .col-md-8, .col-md-12 {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Button groups */
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-group .btn {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  /* Table responsive */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 4px !important;
+    white-space: nowrap;
+  }
+
+  /* Header adjustments */
+  h2 {
+    font-size: 1.3rem !important;
+  }
+
+  h4 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Form labels */
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+
+  /* Input groups */
+  .input-group {
+    flex-wrap: nowrap;
+  }
+
+  /* Action buttons in tables */
+  .btn-sm {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .rounded-circle {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* Badge and small text */
+  .badge {
+    font-size: 0.7rem;
+  }
+
+  .small {
+    font-size: 0.75rem !important;
+  }
+
+  /* Navbar adjustments */
+  .navbar {
+    padding: 0.5rem;
+  }
+
+  /* Modal adjustments */
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  /* Suggestions dropdown */
+  .list-group.position-absolute {
+    position: fixed !important;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999;
+  }
+
+  /* Dashboard cards */
+  .card.shadow-lg,
+  .card.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  }
+
+  /* Flex containers for list page headers */
+  .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 15px !important;
+  }
+
+  .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 > h2 {
+    width: 100%;
+  }
+
+  .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 > .d-flex {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Suggestions dropdown width fix */
+  .list-group.position-absolute {
+    width: calc(100% - 30px) !important;
+    left: 15px !important;
+  }
+
+  /* Text truncation for long content */
+  .text-truncate {
+    max-width: initial;
+    white-space: normal;
+  }
+}
+
+/* Tablet specific (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container-fluid {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .col-md-3 {
+    width: 50%;
+  }
+
+  .col-md-4 {
+    width: 50%;
+  }
+
+  .col-md-6 {
+    width: 50%;
+  }
+
+  .table {
+    font-size: 13px;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Desktop (1024px and up) - optimizations */
+@media (min-width: 1024px) {
+  /* Ensure proper spacing on large screens */
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* Print styles */
+@media print {
+  .btn, .btn-group, .navbar, .sidebar {
+    display: none !important;
+  }
+
+  .table {
+    font-size: 10px;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .table-responsive {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+/* Extra small devices (phones in portrait, less than 576px) */
+@media (max-width: 576px) {
+  body {
+    font-size: 14px;
+  }
+
+  .fw-bold {
+    font-weight: 600 !important;
+  }
+
+  /* Stack all form elements */
+  .row > * {
+    width: 100% !important;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Hide less critical columns on very small screens */
+    .table .hide-on-mobile {
+    display: none;
+  }
+
+  /* Adjust padding */
+  .p-4 {
+    padding: 1rem !important;
+  }
+
+  .p-5 {
+    padding: 1.5rem !important;
+  }
+
+  .py-4 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .px-md-5 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Make buttons full width */
+  .btn:not(.btn-sm):not(.rounded-circle) {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  /* Navigation improvements */
+  .d-flex.gap-2, .d-flex.gap-1 {
+    flex-wrap: wrap;
+    gap: 5px !important;
+  }
+}
+
+/* Fix for table overflow issues */
+table {
+  table-layout: auto;
+}
+
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tbody {
+    display: table-row-group;
+  }
+
+  tr {
+    display: table-row;
+  }
+
+  th, td {
+    display: table-cell;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.4.0",
+    "jsonwebtoken": "^9.0.3",
+    "pptxgenjs": "^4.0.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-toastify": "^11.0.5"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.40.0"
+  }
+}
